@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scott &amp; Sarah’s Camp Kitchen</title>
+<meta name="description" content="One-pot camp recipes and shopping lists for six weeks around Tasmania.">
+<meta name="theme-color" content="#1E3B30">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Camp Kitchen">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+@font-face { font-family: "Bricolage"; src: url("bricolage.woff2") format("woff2"); font-weight: 200 800; font-stretch: 75% 100%; font-display: swap; }
+
+:root {
+  --myrtle: #1E3B30;
+  --myrtle-2: #2A4D40;
+  --contour: #3F6A58;
+  --lichen: #EE7A1E;
+  --lichen-ink: #B4530A;
+  --sea: #2A6888;
+  --grass: #8A873A;
+  --bg: #E8EEEA;
+  --surface: #FFFFFF;
+  --surface-2: #F3F6F3;
+  --ink: #22302A;
+  --ink-soft: #55655D;
+  --line: #CBD6CF;
+  --on-dark: #EEF3EF;
+  --on-dark-soft: #A9C1B5;
+  --cat-pantry: var(--grass);
+  --cat-fresh: var(--sea);
+  --cat-easy: var(--lichen);
+  --radius-sheet: 22px;
+  --radius-row: 14px;
+  --tabbar: 64px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101C17; --surface: #18271F; --surface-2: #1F3128; --ink: #E3EBE6; --ink-soft: #9DB0A6;
+    --line: #2C4137; --lichen-ink: #F59A4E; --myrtle: #0D1A14; --myrtle-2: #17291F; --contour: #2D4A3D;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101C17; --surface: #18271F; --surface-2: #1F3128; --ink: #E3EBE6; --ink-soft: #9DB0A6;
+  --line: #2C4137; --lichen-ink: #F59A4E; --myrtle: #0D1A14; --myrtle-2: #17291F; --contour: #2D4A3D;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 17px/1.55 "Bricolage", system-ui, sans-serif;
+  padding-bottom: calc(var(--tabbar) + var(--safe-b) + 24px);
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3 { font-family: "Bricolage", system-ui, sans-serif; line-height: 1.12; margin: 0; letter-spacing: -0.01em; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--lichen); outline-offset: 2px; border-radius: 6px; }
+a { color: var(--lichen-ink); }
+.wrap { max-width: 680px; margin: 0 auto; padding: 0 16px; }
+.view[hidden] { display: none !important; }
+
+/* ---------- Hero ---------- */
+.hero { background: var(--myrtle); color: var(--on-dark); position: relative; overflow: hidden; padding: calc(28px + var(--safe-t)) 0 26px; }
+.hero svg.topo { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .75; }
+.hero .wrap { position: relative; }
+.hero .lori { display: block; width: min(64%, 270px); height: auto; margin: -8px -10px 2px auto; }
+.hero h1 { font-size: clamp(40px, 12vw, 64px); font-weight: 780; font-stretch: 85%; letter-spacing: -0.03em; line-height: 0.95; }
+.hero p { margin: 12px 0 0; color: var(--on-dark-soft); max-width: 32ch; }
+.passport { margin-top: 22px; }
+.passport-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 360px; }
+.pp { aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-size: 19px; border: 1.5px dashed var(--on-dark-soft); opacity: .6; filter: grayscale(1); background: transparent; padding: 0; }
+.pp.done { opacity: 1; filter: none; border: 2.5px solid var(--lichen); background: var(--myrtle-2); transform: rotate(-8deg); }
+.passport-label { margin-top: 10px; font-size: 15px; color: var(--on-dark-soft); }
+.passport-label b { color: var(--on-dark); }
+
+/* ---------- Section heads ---------- */
+.sec-head { margin: 26px 0 10px; }
+.sec-head h2 { font-size: 26px; font-weight: 720; }
+.sec-head p { margin: 4px 0 0; color: var(--ink-soft); font-size: 15px; }
+
+/* ---------- Filter chips ---------- */
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 16px 16px 2px; margin: 0 -16px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; font-size: 15px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* ---------- Badge ---------- */
+.badge { --c: var(--cat-pantry); flex: none; width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; font-size: 28px; background: var(--c); position: relative; box-shadow: inset 0 0 0 3px rgba(255,255,255,.28), inset 0 0 0 5px var(--c); }
+.badge[data-cat="fresh"] { --c: var(--cat-fresh); }
+.badge[data-cat="easy"] { --c: var(--cat-easy); }
+.badge.cooked::after { content: "✓"; position: absolute; right: -4px; bottom: -4px; width: 22px; height: 22px; border-radius: 50%; background: var(--lichen); color: #fff; font: 700 13px/22px "Bricolage", sans-serif; text-align: center; border: 2px solid var(--surface); }
+
+/* ---------- Recipe list ---------- */
+.group-title { display: flex; align-items: baseline; gap: 10px; margin: 26px 0 8px; }
+.group-title h2 { font-size: 22px; font-weight: 700; }
+.group-title span { font-size: 14px; color: var(--ink-soft); }
+.rlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; background: var(--line); border-radius: var(--radius-row); overflow: hidden; border: 1px solid var(--line); }
+.rrow { display: flex; gap: 14px; align-items: center; width: 100%; text-align: left; border: 0; background: var(--surface); padding: 12px 14px; }
+.rrow:active { background: var(--surface-2); }
+.rrow h3 { font-size: 18px; font-weight: 640; }
+.rrow .meta { font-size: 14px; color: var(--ink-soft); margin-top: 3px; }
+
+/* ---------- Recipe detail ---------- */
+.detail-top { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: calc(10px + var(--safe-t)) 0 10px; border-bottom: 1px solid var(--line); }
+.detail-top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.back { border: 0; background: none; padding: 6px 0; font-weight: 700; font-size: 16px; }
+.wake { border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 14px; }
+.wake[aria-pressed="true"] { border-color: var(--lichen); color: var(--lichen-ink); }
+.d-hero { display: flex; gap: 16px; align-items: center; margin-top: 22px; }
+.d-hero .badge { width: 84px; height: 84px; font-size: 42px; }
+.d-hero h1 { font-size: 30px; font-weight: 760; }
+.d-hero .cat { font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
+.blurb { margin: 16px 0 0; }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+.fact b { display: block; font-family: "Bricolage", sans-serif; font-size: 20px; font-weight: 700; line-height: 1.1; }
+.fact span { font-size: 13px; color: var(--ink-soft); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sheet); padding: 6px 16px 14px; margin-top: 18px; }
+.panel h2 { font-size: 21px; font-weight: 700; margin: 14px 0 8px; }
+.ings { list-style: none; margin: 0; padding: 0; }
+.ings li { border-top: 1px solid var(--line); }
+.ings li:first-child { border-top: 0; }
+.ing { display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; background: none; border: 0; padding: 10px 0; }
+.tick { flex: none; width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line); margin-top: 2px; display: grid; place-items: center; font-size: 14px; color: transparent; }
+[aria-pressed="true"] > .tick, [aria-checked="true"] > .tick { background: var(--lichen); border-color: var(--lichen); color: #fff; }
+.ing[aria-pressed="true"] .txt { text-decoration: line-through; color: var(--ink-soft); }
+.kit-tag { font-size: 12px; border: 1px solid var(--line); border-radius: 999px; padding: 1px 7px; color: var(--ink-soft); margin-left: 6px; white-space: nowrap; }
+.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.steps li:first-child { border-top: 0; }
+.steps li::before { content: counter(s); font: 760 22px/1.2 "Bricolage", sans-serif; color: var(--lichen-ink); }
+.note { border-left: 4px solid var(--c, var(--sea)); padding: 4px 0 4px 14px; margin: 14px 0 4px; }
+.note h3 { font-size: 16px; font-weight: 700; }
+.note p { margin: 2px 0 0; }
+.note.tip { --c: var(--grass); }
+.shopguide .aisle { font: 700 15px/1.3 "Bricolage", sans-serif; margin: 14px 0 4px; color: var(--ink-soft); }
+.sg-row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-top: 1px dashed var(--line); font-size: 15px; }
+.sg-row small { display: block; color: var(--ink-soft); font-size: 13px; }
+.sg-row .amt { white-space: nowrap; font-weight: 700; }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+.btn { border: 0; border-radius: 14px; padding: 13px 14px; font-weight: 700; background: var(--surface); border: 1.5px solid var(--line); }
+.btn.primary { background: var(--lichen); border-color: var(--lichen); color: #fff; }
+.btn.stamped { background: var(--myrtle); border-color: var(--myrtle); color: var(--on-dark); }
+
+/* ---------- Planner ---------- */
+.presets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.preset { text-align: left; border: 1.5px solid var(--line); background: var(--surface); border-radius: 16px; padding: 12px 14px; }
+.preset b { font-family: "Bricolage", sans-serif; font-size: 20px; display: block; }
+.preset span { font-size: 13px; color: var(--ink-soft); display: block; margin-top: 2px; }
+.cycle { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.cycle li { text-align: center; font-size: 12px; color: var(--ink-soft); }
+.cycle .badge { width: 100%; height: auto; aspect-ratio: 1; font-size: 20px; margin-bottom: 4px; }
+.pick { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+.pick:first-child { border-top: 0; }
+.pick .badge { width: 40px; height: 40px; font-size: 20px; }
+.pick .nm { flex: 1; font-size: 16px; line-height: 1.3; }
+.stepper { display: flex; align-items: center; gap: 2px; }
+.stepper button { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface); font-size: 20px; line-height: 1; }
+.stepper output { min-width: 26px; text-align: center; font-weight: 700; }
+summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font: 600 26px/1 "Bricolage", sans-serif; color: var(--ink-soft); }
+details[open] summary::after { content: "−"; }
+.listbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.listbar .btn { padding: 9px 14px; font-size: 15px; }
+.shoprow { display: flex; gap: 12px; width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--line); padding: 10px 0; align-items: flex-start; }
+.shoprow .nm { flex: 1; }
+.shoprow small { display: block; color: var(--ink-soft); font-size: 13px; }
+.shoprow .amt { font-weight: 700; white-space: nowrap; }
+.shoprow[aria-checked="true"] .nm, .shoprow[aria-checked="true"] .amt { text-decoration: line-through; color: var(--ink-soft); }
+.empty { color: var(--ink-soft); padding: 12px 0; }
+
+/* ---------- Kit + tips ---------- */
+.kit-group h2 { font-size: 19px; }
+.tipcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sheet); padding: 16px; margin-top: 12px; }
+.tipcard h2 { font-size: 20px; font-weight: 700; display: flex; gap: 10px; align-items: center; }
+.tipcard p, .tipcard li { margin: 8px 0 0; }
+.tipcard ul { padding-left: 20px; margin: 0; }
+.rhythm { list-style: none; padding: 0; margin: 10px 0 0; }
+.rhythm li { display: grid; grid-template-columns: 76px 1fr; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+.rhythm li:first-child { border-top: 0; }
+.rhythm b { font-family: "Bricolage", sans-serif; color: var(--lichen-ink); }
+.sources { font-size: 14px; color: var(--ink-soft); }
+.sources li { margin-top: 4px; }
+
+/* ---------- Tab bar ---------- */
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: var(--surface); border-top: 1px solid var(--line); padding-bottom: var(--safe-b); }
+.tabbar nav { max-width: 680px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); height: var(--tabbar); }
+.tab { border: 0; background: none; display: grid; place-items: center; align-content: center; gap: 2px; font-size: 12.5px; color: var(--ink-soft); }
+.tab svg { width: 24px; height: 24px; }
+.tab[aria-current="page"] { color: var(--ink); font-weight: 700; }
+.tab[aria-current="page"] svg { color: var(--lichen); }
+.tab .count { position: absolute; }
+
+.toast { position: fixed; left: 50%; bottom: calc(var(--tabbar) + var(--safe-b) + 14px); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 15px; width: max-content; max-width: calc(100% - 32px); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 20; }
+.toast.show { opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pp.done { transition: transform .3s; }
+  .lori > path:last-child { transform-box: fill-box; transform-origin: center; animation: heart 1.4s ease-out .3s both; }
+  @keyframes heart { 0% { transform: translateY(14px) scale(.3); opacity: 0; } 60% { transform: translateY(-3px) scale(1.15); opacity: 1; } 100% { transform: none; } }
+  .stamp-anim { animation: stamp .45s cubic-bezier(.2,1.6,.4,1); }
+  @keyframes stamp { from { transform: scale(1.6) rotate(12deg); opacity: 0; } to { transform: scale(1) rotate(-8deg); opacity: 1; } }
+}
+</style>
+</head>
+<body>
+
+<!-- ======== MEALS ======== -->
+<main id="view-meals" class="view">
+  <header class="hero">
+    <svg class="topo" aria-hidden="true" id="topo"></svg>
+    <div class="wrap">
+      <svg class="lori" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 150" role="img" aria-label="Two rainbow lorikeets snuggled together on a gum branch">
+  <defs>
+    <linearGradient id="lkBreast" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFD23F"/>
+      <stop offset=".55" stop-color="#FF8A1F"/>
+      <stop offset="1" stop-color="#F0451E"/>
+    </linearGradient>
+    <g id="lkBird">
+      <!-- tail -->
+      <path d="M44 100 C36 118 30 132 26 146 L40 144 C44 128 50 114 56 104 Z" fill="#2E8B3A"/>
+      <path d="M40 112 C36 124 33 134 31 143" stroke="#55B848" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- body -->
+      <ellipse cx="60" cy="84" rx="27" ry="31" fill="#48A944"/>
+      <!-- breast -->
+      <ellipse cx="67" cy="82" rx="18" ry="21" fill="url(#lkBreast)"/>
+      <path d="M52 96 Q66 110 82 96 Q80 108 66 110 Q55 108 52 96 Z" fill="#3B4FC4"/>
+      <!-- wing -->
+      <path d="M36 70 C30 88 36 106 54 110 C48 96 47 82 52 68 Z" fill="#2F8F3A"/>
+      <path d="M40 80 C38 90 41 100 48 105" stroke="#5CC24E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- collar -->
+      <path d="M46 60 Q66 72 86 60 L84 67 Q66 78 48 67 Z" fill="#B8E34A"/>
+      <!-- head -->
+      <circle cx="66" cy="46" r="23" fill="#3550C8"/>
+      <circle cx="58" cy="38" r="9" fill="#4A66DC" opacity=".7"/>
+      <!-- blush -->
+      <ellipse cx="77" cy="56" rx="5.5" ry="3.4" fill="#FF8FB1" opacity=".85"/>
+      <!-- eye -->
+      <circle cx="73" cy="44" r="6.2" fill="#1A1A22"/>
+      <circle cx="75.2" cy="41.8" r="2.3" fill="#fff"/>
+      <circle cx="71.4" cy="46.6" r="1" fill="#fff" opacity=".8"/>
+      <!-- beak -->
+      <path d="M84 44 C95 45 98 53 91 61 C89 56 86 53 83 52 Z" fill="#F24A2A"/>
+      <path d="M84 52 C87 53 89 56 90 59 C86 59 84 57 83 54 Z" fill="#C7361F"/>
+      <!-- feet -->
+      <path d="M56 113 q-3 6 -7 6 M60 114 q0 6 -3 7 M68 113 q3 6 7 6 M64 114 q0 6 3 7" stroke="#9A8A8F" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </g>
+  </defs>
+  <!-- gum branch -->
+  <path d="M0 122 C60 112 120 124 180 116 C205 113 225 108 240 100" stroke="#7A5638" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M178 116 C190 128 200 134 214 136" stroke="#7A5638" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M214 136 C226 130 236 132 240 138 C230 142 220 141 214 136 Z" fill="#8DB596"/>
+  <path d="M196 129 C200 140 196 148 188 150 C186 142 190 134 196 129 Z" fill="#7FA88A"/>
+  <path d="M10 120 C4 130 6 140 14 146 C18 136 16 127 10 120 Z" fill="#8DB596"/>
+  <path d="M30 118 C38 106 48 102 58 104 C52 114 42 119 30 118 Z" fill="#7FA88A"/>
+  <path d="M222 104 C226 92 234 86 240 86 L240 96 C234 100 228 103 222 104 Z" fill="#8DB596"/>
+  <!-- birds: left bird faces right, right bird mirrored, heads leaning in -->
+  <g transform="translate(18 2) rotate(7 60 110)"><use href="#lkBird"/></g>
+  <g transform="translate(222 2) scale(-1 1) rotate(7 60 110)"><use href="#lkBird"/></g>
+  <!-- little heart -->
+  <path d="M120 14 c-3 -6 -12 -5 -11 2 c1 5 11 10 11 10 c0 0 10 -5 11 -10 c1 -7 -8 -8 -11 -2 z" fill="#FF8FB1"/>
+</svg>
+      <h1>Scott &amp; Sarah’s<br>Camp Kitchen</h1>
+      <p>Fourteen one-pot meals for six weeks on the road.</p>
+      <div class="passport">
+        <div class="passport-row" id="passport"></div>
+        <div class="passport-label" id="passport-label"></div>
+      </div>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="chips" role="group" aria-label="Filter meals" id="chips"></div>
+    <div id="groups"></div>
+  </div>
+</main>
+
+<!-- ======== RECIPE DETAIL ======== -->
+<main id="view-recipe" class="view" hidden>
+  <div class="detail-top"><div class="wrap">
+    <button class="back" id="back">‹ All meals</button>
+    <button class="wake" id="wake" aria-pressed="false" hidden>Keep screen on</button>
+  </div></div>
+  <div class="wrap" id="recipe"></div>
+</main>
+
+<!-- ======== PLAN & SHOP ======== -->
+<main id="view-plan" class="view" hidden>
+  <div class="wrap">
+    <div class="sec-head" style="margin-top: calc(26px + var(--safe-t))">
+      <h2>Plan the restock</h2>
+      <p>Pick a cycle or set your own meals, and the shopping list appears below.</p>
+    </div>
+    <div class="presets">
+      <button class="preset" data-cycle="A"><b>Cycle A</b><span>Salmon night, chicken, barley, curry, burritos, puttanesca, dal</span></button>
+      <button class="preset" data-cycle="B"><b>Cycle B</b><span>Chilli, shakshuka, chorizo, minestrone, fried rice, dal, puttanesca</span></button>
+    </div>
+    <ol class="cycle" id="cycle" aria-label="Dinner order for this cycle"></ol>
+
+    <details class="panel" id="pickpanel">
+      <summary><h2>Adjust meals for this restock</h2></summary>
+      <div id="picks"></div>
+    </details>
+
+    <section class="panel">
+      <h2 id="list-title">Shopping list</h2>
+      <div class="listbar">
+        <button class="btn" id="share">Share list</button>
+        <button class="btn" id="untick">Untick all</button>
+        <button class="btn" id="clearplan">Clear plan</button>
+      </div>
+      <div id="shoplist"></div>
+    </section>
+  </div>
+</main>
+
+<!-- ======== PANTRY KIT ======== -->
+<main id="view-kit" class="view" hidden>
+  <div class="wrap">
+    <div class="sec-head" style="margin-top: calc(26px + var(--safe-t))">
+      <h2>Bring from home</h2>
+      <p>Pack this before the ferry. All of it is allowed into Tasmania. Buy fresh produce, garlic, ginger, onions, potatoes and honey after you land.</p>
+    </div>
+    <div id="kit"></div>
+  </div>
+</main>
+
+<!-- ======== TIPS ======== -->
+<main id="view-tips" class="view" hidden>
+  <div class="wrap">
+    <div class="sec-head" style="margin-top: calc(26px + var(--safe-t))">
+      <h2>On the road</h2>
+      <p>What we found out about cooking and shopping around Tasmania in November and December.</p>
+    </div>
+
+    <section class="tipcard">
+      <h2>⛴️ Crossing on the Spirit</h2>
+      <p>Fresh fruit and vegetables can't come into Tasmania, including potatoes, fresh herbs, garlic, ginger and onions. Dried pulses, pasta, rice, flour, dried herbs and spices, sauces and oils are fine.</p>
+      <p>Honey is on the "if in doubt, leave it at home" list, so buy local leatherwood instead. Food eaten on board has to be binned before you leave the terminal.</p>
+    </section>
+
+    <section class="tipcard">
+      <h2>🔁 The restock rhythm</h2>
+      <ol class="rhythm">
+        <li><b>Shop day</b><span>Salmon or fish that night. It's the most perishable thing you'll buy.</span></li>
+        <li><b>Night 2</b><span>Chicken or mince.</span></li>
+        <li><b>Nights 3–4</b><span>Mushrooms, spinach, spring onions and cucumber, before they tire.</span></li>
+        <li><b>Nights 5–7</b><span>Pantry one-pots on hardy veg: cabbage, carrots, pumpkin, potatoes, onions.</span></li>
+        <li><b>Rescue</b><span>Chorizo stew or fried rice if the next shop slips a few days.</span></li>
+      </ol>
+    </section>
+
+    <section class="tipcard">
+      <h2>🛒 Where to restock</h2>
+      <p>Woolworths stores cluster around Hobart, Launceston and the north. The west coast towns (Queenstown, Strahan, Zeehan) are small, so stock up for a longer stretch before heading west.</p>
+      <p>Plan a shop soon after you roll off the ferry, since you'll arrive with no fresh food.</p>
+    </section>
+
+    <section class="tipcard">
+      <h2>🧊 Packing the fridge and drawers</h2>
+      <ul>
+        <li>Fridge at 3–4°C. Raw meat sealed, on the bottom.</li>
+        <li>Leftovers: cool them, get them in the fridge within 2 hours, eat within 2–3 days, and reheat until steaming. Be strictest with rice.</li>
+        <li>Hardy veg in breathable bags in a drawer, not plastic. Keep potatoes away from onions.</li>
+        <li>Tins low and heavy so they can't crush anything. Eggs in a hard case. Avocados rock-hard.</li>
+        <li>Potatoes last two to three months in cool weather, carrots one to two weeks or more, and garlic for months. Cabbage keeps for weeks, so use it where you'd use lettuce.</li>
+      </ul>
+    </section>
+
+    <section class="tipcard">
+      <h2>🔥 Gas and fire bans</h2>
+      <p>Seasonal campfire bans usually start in late spring or summer, but gas stoves and gas barbecues are still permitted. Some areas, including the World Heritage Area and Freycinet, are fuel-stove-only all year.</p>
+      <p>On Total Fire Ban days, check the Tasmania Fire Service before cooking outdoors.</p>
+    </section>
+
+    <section class="tipcard">
+      <h2>🍓 In season, Nov to Dec</h2>
+      <p>Local strawberries start hitting shelves in November and the first cherries are expected from mid-December. Grab the free Tasmanian Seasonal Produce Guide on the Spirit or at a visitor centre to find farm gates.</p>
+      <p>Easy local swaps: Tasmanian salmon, Tassie cheddar and leatherwood honey.</p>
+    </section>
+
+    <section class="tipcard">
+      <h2>🧽 Less washing up</h2>
+      <ul>
+        <li>Wipe pans with paper towel before washing.</li>
+        <li>One Jetboil of hot water does the dishes for two.</li>
+        <li>Heat rice pouches first, then cook in the same pan.</li>
+      </ul>
+    </section>
+
+    <section class="tipcard sources">
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://nre.tas.gov.au/biosecurity-tasmania/travellers-guide-to-tasmanian-biosecurity-what-you-can-and-cant-bring-into-tasmania/food">Biosecurity Tasmania – food you can and can't bring</a></li>
+        <li><a href="https://nre.tas.gov.au/biosecurity-tasmania/travellers-guide-to-tasmanian-biosecurity-what-you-can-and-cant-bring-into-tasmania/travelling-to-tasmania-on-the-spirit-of-tasmania">Biosecurity Tasmania – travelling on the Spirit</a></li>
+        <li><a href="https://parks.tas.gov.au/explore-our-parks/know-before-you-go/campfires-and-fire-bans">Tasmania Parks – campfires and fire bans</a></li>
+        <li><a href="https://theboatgalley.com/storing-veggies-refrigeration/">The Boat Galley – storing vegetables without refrigeration</a></li>
+        <li><a href="https://www.fruitgrowerstas.org.au/news/1390/">Fruit Growers Tasmania – Seasonal Produce Guide</a></li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<div class="tabbar"><nav aria-label="Sections">
+  <button class="tab" data-view="meals" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16v2a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6v-2z"/><path d="M2 11h2M20 11h2M9 7c0-1.5 1-1.5 1-3M14 7c0-1.5 1-1.5 1-3"/></svg>Meals</button>
+  <button class="tab" data-view="plan">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.5 11h11L21 8H6.2"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg>Plan & shop</button>
+  <button class="tab" data-view="kit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/></svg>Pantry kit</button>
+  <button class="tab" data-view="tips">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l6-12 4 7 3-4 5 9z"/><circle cx="17" cy="5" r="2"/></svg>Road tips</button>
+</nav></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="recipes.js"></script>
+<script>
+(function () {
+  "use strict";
+  const $ = (s, el = document) => el.querySelector(s);
+  const byId = Object.fromEntries(RECIPES.map(r => [r.id, r]));
+  const AISLES = [["veg", "Fruit & veg"], ["bakery", "Bread & wraps"], ["fridge", "Fridge & deli"], ["pantry", "Pantry & tins"]];
+
+  /* ---- storage (per device; fails quietly) ---- */
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem("tck:" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem("tck:" + k, JSON.stringify(v)); } catch (e) {} }
+  };
+  let cooked = new Set(store.get("cooked", []));
+  let plan = store.get("plan", {});
+  let ticked = new Set(store.get("ticked", []));
+  let filter = "all";
+  const save = () => { store.set("cooked", [...cooked]); store.set("plan", plan); store.set("ticked", [...ticked]); };
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const badge = (r, extra = "") => `<span class="badge ${cooked.has(r.id) ? "cooked" : ""} ${extra}" data-cat="${r.cat}" aria-hidden="true">${r.emoji}</span>`;
+
+  function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1800); }
+
+  /* ---- quantity formatting ---- */
+  const FR = { 0.25: "¼", 0.5: "½", 0.75: "¾" };
+  function fmtNum(q) {
+    const whole = Math.floor(q + 1e-9), frac = Math.round((q - whole) * 4) / 4;
+    if (!frac) return String(whole);
+    return (whole ? whole : "") + (FR[frac] || frac.toFixed(2).replace(/^0/, ""));
+  }
+  function fmtAmt(q, u, name) {
+    if (u === "g") return q >= 1000 ? (q / 1000).toFixed(q % 1000 ? 2 : 0).replace(/\.?0+$/, "") + " kg" : Math.round(q) + " g";
+    if (u === "L") return fmtNum(q) + " L";
+    if (u === "cloves") return q + " cloves" + (q > 6 ? ` (≈${Math.ceil(q / 10)} bulb${q > 10 ? "s" : ""})` : "");
+    if (u === "tins") return q + (q === 1 ? " tin" : " tins");
+    if (u === "") { const s = fmtNum(q); return q % 1 ? `${s} (buy ${Math.ceil(q)})` : s; }
+    return fmtNum(q) + " " + u;
+  }
+
+  /* ---- aggregate shopping items ---- */
+  function shoppingFor(counts) {
+    const map = new Map();
+    for (const [id, n] of Object.entries(counts)) {
+      const r = byId[id]; if (!r || !n) continue;
+      for (const i of r.ing) {
+        if (!i.s) continue;
+        const [name, q, u, aisle] = i.s, key = name + "|" + u;
+        const cur = map.get(key) || { name, u, aisle, q: 0, from: new Set() };
+        cur.q += q * n; cur.from.add(r.short || r.name);
+        map.set(key, cur);
+      }
+    }
+    return [...map.entries()].map(([key, v]) => ({ key, ...v }));
+  }
+
+  /* ---- topo lines in the hero ---- */
+  function drawTopo() {
+    const svg = $("#topo"); const W = 400, H = 300; svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
+    let out = "";
+    const peaks = [[320, 70, 13], [60, 270, 8]];
+    for (const [cx, cy, n] of peaks) {
+      for (let k = 1; k <= n; k++) {
+        const r = k * 19; let d = "";
+        for (let a = 0; a <= 72; a++) {
+          const t = a / 72 * Math.PI * 2;
+          const rr = r * (1 + 0.16 * Math.sin(3 * t + k * 0.35) + 0.07 * Math.sin(5 * t + 1.3 + k * 0.2));
+          d += (a ? "L" : "M") + (cx + rr * Math.cos(t)).toFixed(1) + " " + (cy + rr * 0.8 * Math.sin(t)).toFixed(1);
+        }
+        out += `<path d="${d}Z" fill="none" stroke="var(--contour)" stroke-width="${k % 4 === 0 ? 1.6 : 0.8}"/>`;
+      }
+    }
+    svg.innerHTML = out;
+  }
+
+  /* ---- meals view ---- */
+  function renderPassport() {
+    $("#passport").innerHTML = RECIPES.map(r => `<button class="pp ${cooked.has(r.id) ? "done" : ""}" data-open="${r.id}" aria-label="${esc(r.name)}${cooked.has(r.id) ? ", cooked" : ""}">${r.emoji}</button>`).join("");
+    const n = cooked.size;
+    $("#passport-label").innerHTML = n === RECIPES.length ? "<b>All 14 cooked.</b>" : n ? `<b>${n} of ${RECIPES.length}</b> cooked so far. Stamp each one as you go.` : "Stamp each meal as you cook it.";
+  }
+  function renderChips() {
+    const opts = [["all", "All meals"], ...Object.entries(CATS).map(([k, c]) => [k, c.label])];
+    $("#chips").innerHTML = opts.map(([k, l]) => `<button class="chip" data-filter="${k}" aria-pressed="${filter === k}">${l}</button>`).join("");
+  }
+  function renderGroups() {
+    $("#groups").innerHTML = Object.entries(CATS).filter(([k]) => filter === "all" || filter === k).map(([k, c]) => `
+      <div class="group-title"><h2>${c.label}</h2><span>${c.note}</span></div>
+      <ul class="rlist">${RECIPES.filter(r => r.cat === k).map(r => `
+        <li><button class="rrow" data-open="${r.id}">${badge(r)}
+          <span><h3>${esc(r.name)}</h3><span class="meta">${r.mins} min. ${esc(r.keeps)}.</span></span>
+        </button></li>`).join("")}
+      </ul>`).join("");
+  }
+
+  /* ---- recipe view ---- */
+  function renderRecipe(r) {
+    const items = shoppingFor({ [r.id]: 1 });
+    const n = plan[r.id] || 0;
+    $("#recipe").innerHTML = `
+      <div class="d-hero">${badge(r)}<div><h1>${esc(r.name)}</h1><div class="cat">${CATS[r.cat].label}</div></div></div>
+      <p class="blurb">${esc(r.blurb)}</p>
+      <div class="facts">
+        <div class="fact"><b>${r.mins} min</b><span>start to bowl</span></div>
+        <div class="fact"><b>${esc(r.serves.split(" ")[0].replace(/,$/, ""))}</b><span>${esc(r.serves.replace(/^\S+\s?/, "").replace(/[()]/g, "") || "serves")}</span></div>
+        <div class="fact"><b>${esc(r.keeps.match(/\d[–\d]*\s*days?/)?.[0] || (r.keeps.includes("next day") ? "1 day" : "Fresh"))}</b><span>${r.keeps.includes("salmon") ? "to cook the salmon" : r.keeps === "Make fresh" ? "best eaten now" : "in the fridge"}</span></div>
+      </div>
+      <div class="actions">
+        <button class="btn ${cooked.has(r.id) ? "stamped" : "primary"}" id="stamp">${cooked.has(r.id) ? "Cooked ✓" : "Stamp as cooked"}</button>
+        <button class="btn" id="addplan">${n ? `On the list ×${n}` : "Add to shop list"}</button>
+      </div>
+      <section class="panel"><h2>Ingredients</h2>
+        <ul class="ings">${r.ing.map(i => `<li><button class="ing" aria-pressed="false"><span class="tick">✓</span><span class="txt">${esc(i.t)}${i.kit ? '<span class="kit-tag">kit</span>' : ""}</span></button></li>`).join("")}</ul>
+      </section>
+      <section class="panel"><h2>Method</h2>
+        <ol class="steps">${r.steps.map(s => `<li><span>${esc(s)}</span></li>`).join("")}</ol>
+        <div class="note"><h3>Leftovers</h3><p>${esc(r.leftovers)}</p></div>
+        <div class="note tip"><h3>Camp tip</h3><p>${esc(r.tip)}</p></div>
+      </section>
+      <section class="panel shopguide"><h2>Shopping guide</h2>
+        <p style="margin:0;color:var(--ink-soft);font-size:15px">For one batch. Items marked kit come from the pantry kit.</p>
+        ${AISLES.map(([a, label]) => { const rows = items.filter(x => x.aisle === a); return rows.length ? `<div class="aisle">${label}</div>` + rows.map(x => `<div class="sg-row"><span>${esc(x.name)}${KEEPS[x.name] ? `<small>${esc(KEEPS[x.name])}</small>` : ""}</span><span class="amt">${fmtAmt(x.q, x.u, x.name)}</span></div>`).join("") : ""; }).join("")}
+      </section>`;
+    $("#stamp").onclick = e => {
+      if (cooked.has(r.id)) cooked.delete(r.id); else { cooked.add(r.id); toast(`${r.emoji} Stamped. ${cooked.size} of ${RECIPES.length}.`); }
+      save(); renderRecipe(r); const b = $(".d-hero .badge"); if (cooked.has(r.id)) b.classList.add("stamp-anim");
+    };
+    $("#addplan").onclick = () => { plan[r.id] = (plan[r.id] || 0) + 1; save(); toast(`Added. ×${plan[r.id]} on this restock.`); renderRecipe(r); };
+    document.querySelectorAll(".ing").forEach(b => b.onclick = () => b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"));
+  }
+
+  /* ---- plan & shop ---- */
+  function renderPlan(initial) {
+    if (initial) $("#pickpanel").open = !Object.keys(plan).length;
+    const order = plan.__cycle ? CYCLES[plan.__cycle].plan : null;
+    $("#cycle").innerHTML = order ? order.map((id, i) => `<li>${badge(byId[id])}Night ${i + 1}</li>`).join("") : "";
+    $("#picks").innerHTML = RECIPES.map(r => `
+      <div class="pick">${badge(r)}<span class="nm">${esc(r.name)}</span>
+        <span class="stepper"><button data-dec="${r.id}" aria-label="One fewer ${esc(r.name)}">−</button><output>${plan[r.id] || 0}</output><button data-inc="${r.id}" aria-label="One more ${esc(r.name)}">+</button></span>
+      </div>`).join("");
+    const counts = Object.fromEntries(Object.entries(plan).filter(([k]) => !k.startsWith("__")));
+    const items = shoppingFor(counts);
+    const dinners = Object.entries(counts).filter(([id]) => byId[id] && byId[id].cat !== "easy").reduce((a, [, n]) => a + n, 0);
+    $("#list-title").textContent = items.length ? `Shopping list for ${dinners} dinner${dinners === 1 ? "" : "s"}` : "Shopping list";
+    if (!items.length) { $("#shoplist").innerHTML = `<p class="empty">Nothing planned yet. Tap Cycle A or Cycle B above, or add meals with the + buttons.</p>`; return; }
+    const left = items.filter(x => !ticked.has(x.key)).length;
+    $("#shoplist").innerHTML = `<p class="empty" style="padding-bottom:0">${left} of ${items.length} items still to get. Tick off anything already in the drawers.</p>` +
+      AISLES.map(([a, label]) => { const rows = items.filter(x => x.aisle === a).sort((x, y) => x.name.localeCompare(y.name)); return rows.length ? `<h2 style="font-size:18px;margin-top:18px">${label}</h2>` + rows.map(x => `
+        <button class="shoprow" role="checkbox" aria-checked="${ticked.has(x.key)}" data-tick="${esc(x.key)}"><span class="tick">✓</span>
+          <span class="nm">${esc(x.name)}<small>For ${esc([...x.from].join(", "))}</small>${KEEPS[x.name] ? `<small>${esc(KEEPS[x.name])}</small>` : ""}</span>
+          <span class="amt">${fmtAmt(x.q, x.u, x.name)}</span></button>`).join("") : ""; }).join("");
+  }
+  function listText() {
+    const counts = Object.fromEntries(Object.entries(plan).filter(([k]) => !k.startsWith("__")));
+    const items = shoppingFor(counts).filter(x => !ticked.has(x.key));
+    return "Scott & Sarah’s camp shop\n" + AISLES.map(([a, l]) => { const rows = items.filter(x => x.aisle === a); return rows.length ? `\n${l}\n` + rows.map(x => `- ${x.name}: ${fmtAmt(x.q, x.u, x.name)}`).join("\n") : ""; }).join("\n");
+  }
+
+  /* ---- kit ---- */
+  function renderKit() {
+    const k = store.get("kit", []); const have = new Set(k);
+    $("#kit").innerHTML = KIT.map(g => `<section class="panel kit-group"><h2>${esc(g.group)}</h2>${g.items.map(it => { const key = g.group + "|" + it; return `<button class="shoprow" role="checkbox" aria-checked="${have.has(key)}" data-kit="${esc(key)}"><span class="tick">✓</span><span class="nm">${esc(it)}</span></button>`; }).join("")}</section>`).join("");
+  }
+
+  /* ---- routing ---- */
+  let wakeLock = null;
+  function show(view) {
+    document.querySelectorAll(".view").forEach(v => v.hidden = v.id !== "view-" + view);
+    document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.view === (view === "recipe" ? "meals" : view) ? "page" : "false"));
+  }
+  function route() {
+    const h = location.hash.replace(/^#\/?/, "");
+    if (h.startsWith("r/") && byId[h.slice(2)]) { show("recipe"); renderRecipe(byId[h.slice(2)]); window.scrollTo(0, 0); return; }
+    if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; $("#wake").setAttribute("aria-pressed", "false"); }
+    const v = ["plan", "kit", "tips"].includes(h) ? h : "meals";
+    if (v === "meals") { renderPassport(); renderGroups(); }
+    if (v === "plan") renderPlan(true);
+    if (v === "kit") renderKit();
+    show(v); window.scrollTo(0, 0);
+  }
+
+  /* ---- events ---- */
+  document.addEventListener("click", e => {
+    const t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.open) location.hash = "r/" + t.dataset.open;
+    else if (t.dataset.view) location.hash = t.dataset.view === "meals" ? "" : t.dataset.view;
+    else if (t.dataset.filter) { filter = t.dataset.filter; renderChips(); renderGroups(); }
+    else if (t.dataset.cycle) { const c = CYCLES[t.dataset.cycle]; plan = { __cycle: t.dataset.cycle }; c.plan.forEach(id => plan[id] = (plan[id] || 0) + 1); Object.assign(plan, c.extras); ticked.clear(); save(); renderPlan(); toast(`${c.name} loaded.`); }
+    else if (t.dataset.inc) { plan[t.dataset.inc] = (plan[t.dataset.inc] || 0) + 1; delete plan.__cycle; save(); renderPlan(); }
+    else if (t.dataset.dec) { plan[t.dataset.dec] = Math.max(0, (plan[t.dataset.dec] || 0) - 1); if (!plan[t.dataset.dec]) delete plan[t.dataset.dec]; delete plan.__cycle; save(); renderPlan(); }
+    else if (t.dataset.tick) { ticked.has(t.dataset.tick) ? ticked.delete(t.dataset.tick) : ticked.add(t.dataset.tick); save(); renderPlan(); }
+    else if (t.dataset.kit) { const k = new Set(store.get("kit", [])); k.has(t.dataset.kit) ? k.delete(t.dataset.kit) : k.add(t.dataset.kit); store.set("kit", [...k]); t.setAttribute("aria-checked", k.has(t.dataset.kit)); }
+  });
+  $("#back").onclick = () => { location.hash = ""; };
+  $("#untick").onclick = () => { ticked.clear(); save(); renderPlan(); };
+  $("#clearplan").onclick = () => { plan = {}; ticked.clear(); save(); renderPlan(); toast("Plan cleared."); };
+  $("#share").onclick = async () => {
+    const text = listText();
+    try { if (navigator.share) { await navigator.share({ title: "Camp shop", text }); return; } await navigator.clipboard.writeText(text); toast("List copied."); }
+    catch (e) { if (e && e.name !== "AbortError") toast("Couldn't share. Try again."); }
+  };
+  if ("wakeLock" in navigator) {
+    const w = $("#wake"); w.hidden = false;
+    w.onclick = async () => {
+      if (wakeLock) { await wakeLock.release().catch(() => {}); wakeLock = null; w.setAttribute("aria-pressed", "false"); return; }
+      try { wakeLock = await navigator.wakeLock.request("screen"); w.setAttribute("aria-pressed", "true"); wakeLock.addEventListener("release", () => { wakeLock = null; w.setAttribute("aria-pressed", "false"); }); }
+      catch (e) { toast("Couldn't keep the screen on."); }
+    };
+  }
+  window.addEventListener("hashchange", route);
+
+  drawTopo(); renderChips(); route();
+
+  if ("serviceWorker" in navigator && window.isSecureContext) {
+    window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+  }
+})();
+</script>
+</body>
+</html>
