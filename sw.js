@@ -1,6 +1,6 @@
 /* Tassie Camp Kitchen offline cache.
    When you change any file, bump VERSION so both phones pick up the update next time they open the site with signal. */
-const VERSION = "tck-v5";
+const VERSION = "tck-v6";
 const FILES = [
   "./",
   "index.html",

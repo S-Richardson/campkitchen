@@ -458,13 +458,13 @@ const RECIPES = [
     tip: "Buy tuna in olive oil rather than brine. The oil makes the smash creamy without mayonnaise."
   },
   {
-    id: "oatbites", batch: "6 serves of 2 bites", short: "Oat bites", name: "Peanut butter oat bites", emoji: "🥜", cat: "snacks",
-    mins: 15, serves: "12 bites (6 serves of 2)", protein: "≈9 g", keeps: "Keeps 1 week in the fridge",
+    id: "oatbites", batch: "6 serves of 2 bites", short: "Oat bites", name: "Almond butter oat bites", emoji: "🍯", cat: "snacks",
+    mins: 15, serves: "12 bites (6 serves of 2)", protein: "≈8 g", keeps: "Keeps 1 week in the fridge",
     keepShort: "1 week", keepLabel: "in the fridge",
     blurb: "These take one bowl and no cooking. Roll them at night and they're firm by morning.",
     ing: [
       { t: "1 cup (90 g) rolled oats", s: ["Rolled oats", 90, "g", "pantry"] },
-      { t: "½ cup (125 g) natural peanut butter", s: ["Natural peanut butter (100% peanuts)", 125, "g", "pantry"] },
+      { t: "½ cup (125 g) natural almond butter", s: ["Natural almond butter (100% almonds)", 125, "g", "pantry"] },
       { t: "3 tbsp Tasmanian honey", s: ["Tasmanian honey (buy local)", 3, "tbsp", "pantry"] },
       { t: "2 tbsp (24 g) chia seeds", s: ["Chia seeds", 24, "g", "pantry"] },
       { t: "30 g pepitas", s: ["Pepitas", 30, "g", "pantry"] },
@@ -476,7 +476,7 @@ const RECIPES = [
       "Chill in a lidded container for at least an hour to firm up."
     ],
     leftovers: "They keep for a week in the fridge. Out of the fridge they soften, but they're fine in a daypack for the day.",
-    tip: "Natural peanut butter separates in the jar, so stir the oil back in before you measure it."
+    tip: "Natural almond butter separates in the jar, so stir the oil back in before you measure it."
   },
   {
     id: "chickpeas", batch: "4 serves", short: "Crispy chickpeas", name: "Crispy parmesan chickpeas", emoji: "🧆", cat: "snacks",
@@ -558,7 +558,7 @@ const KEEPS = {
   "Red curry paste, jar": "Fridge once opened",
   "Strawberries": "2–3 days in the fridge, so buy near the day",
   "Almonds": "Months in a sealed bag",
-  "Natural peanut butter (100% peanuts)": "Months; no fridge needed",
+  "Natural almond butter (100% almonds)": "Months; no fridge needed",
   "Chia seeds": "Months, kept dry",
   "Tasmanian hot-smoked salmon": "Sealed until its use-by; 2 days once open",
   "Rye crispbread": "Months sealed; keep it dry"
@@ -574,7 +574,7 @@ const CYCLES = {
 const KIT = [
   { group: "Spice tin", items: ["Ground cumin", "Smoked paprika", "Dried oregano", "Chilli flakes", "Turmeric", "Garam masala", "Cinnamon", "Dried thyme", "Dried dill", "Dried mint", "Bay leaves", "Salt and pepper grinders"] },
   { group: "Bottles", items: ["Olive oil (1 L)", "Sesame oil", "Soy sauce", "Red wine vinegar", "Chilli sauce"] },
-  { group: "Dry goods", items: ["Stock cubes (2 boxes)", "Red lentils", "Pearl barley", "Wholemeal couscous", "Wholemeal spaghetti", "Risoni", "Rolled oats", "Microwave rice pouches", "Dried porcini", "Walnuts, almonds and pepitas", "Chia seeds", "Natural peanut butter (100% peanuts)"] },
+  { group: "Dry goods", items: ["Stock cubes (2 boxes)", "Red lentils", "Pearl barley", "Wholemeal couscous", "Wholemeal spaghetti", "Risoni", "Rolled oats", "Microwave rice pouches", "Dried porcini", "Walnuts, almonds and pepitas", "Chia seeds", "Natural almond butter (100% almonds)"] },
   { group: "Tins and jars for Cycle A", items: ["Black beans ×2", "Chickpeas ×3", "Cannellini ×2", "Diced tomatoes ×2", "Crushed tomatoes ×1", "Coconut milk ×2", "Tuna in olive oil ×1", "Capers, olives, anchovies", "Red curry paste, Dijon, tomato paste", "Roasted capsicum jar", "UHT milk ×2 (1 L)"] },
   { group: "Kit, not food", items: ["Paper towel (wipe pans before washing)", "Zip bags for parmesan rinds and leftovers", "Breathable produce bags", "Hard egg case", "4 lidded leftover containers", "Fridge thermometer"] }
 ];
