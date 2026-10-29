@@ -8,7 +8,7 @@ One-pot camp recipes and shopping lists for six weeks around Tasmania. Works off
 3. Open `https://s-richardson.github.io/campkitchen/` in Safari (iPhone) or Chrome (Android), let it load fully once, then Share → Add to Home Screen.
 
 ## Updating
-- Recipes live in `recipes.js`.
+- Recipes and snacks live in `recipes.js`.
 - After any change, bump `VERSION` in `sw.js` (e.g. `tck-v2`) so phones pick up the new version next time they open it with signal.
 
 Fonts: Bricolage Grotesque (SIL Open Font License).

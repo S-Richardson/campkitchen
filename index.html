@@ -35,6 +35,7 @@
   --cat-pantry: var(--grass);
   --cat-fresh: var(--sea);
   --cat-easy: var(--lichen);
+  --cat-snacks: #3F57C6;
   --radius-sheet: 22px;
   --radius-row: 14px;
   --tabbar: 64px;
@@ -99,6 +100,7 @@ a { color: var(--lichen-ink); }
 .badge { --c: var(--cat-pantry); flex: none; width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; font-size: 28px; background: var(--c); position: relative; box-shadow: inset 0 0 0 3px rgba(255,255,255,.28), inset 0 0 0 5px var(--c); }
 .badge[data-cat="fresh"] { --c: var(--cat-fresh); }
 .badge[data-cat="easy"] { --c: var(--cat-easy); }
+.badge[data-cat="snacks"] { --c: var(--cat-snacks); }
 .badge.cooked::after { content: "✓"; position: absolute; right: -4px; bottom: -4px; width: 22px; height: 22px; border-radius: 50%; background: var(--lichen); color: #fff; font: 700 13px/22px "Bricolage", sans-serif; text-align: center; border: 2px solid var(--surface); }
 
 /* ---------- Recipe list ---------- */
@@ -165,6 +167,9 @@ a { color: var(--lichen-ink); }
 .pick:first-child { border-top: 0; }
 .pick .badge { width: 40px; height: 40px; font-size: 20px; }
 .pick .nm { flex: 1; font-size: 16px; line-height: 1.3; }
+.pick .nm small { display: block; font-size: 13px; color: var(--ink-soft); }
+.makes { margin: 0 0 4px; color: var(--ink-soft); font-size: 15px; }
+.actions.single { grid-template-columns: 1fr; }
 .stepper { display: flex; align-items: center; gap: 2px; }
 .stepper button { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface); font-size: 20px; line-height: 1; }
 .stepper output { min-width: 26px; text-align: center; font-weight: 700; }
@@ -274,7 +279,7 @@ details[open] summary::after { content: "−"; }
   <path d="M120 14 c-3 -6 -12 -5 -11 2 c1 5 11 10 11 10 c0 0 10 -5 11 -10 c1 -7 -8 -8 -11 -2 z" fill="#FF8FB1"/>
 </svg>
       <h1>Scott &amp; Sarah’s<br>Camp Kitchen</h1>
-      <p>Fourteen one-pot meals for six weeks on the road.</p>
+      <p>Fourteen one-pot meals and seven high-protein snacks for six weeks on the road.</p>
       <div class="passport">
         <div class="passport-row" id="passport"></div>
         <div class="passport-label" id="passport-label"></div>
@@ -290,7 +295,7 @@ details[open] summary::after { content: "−"; }
 <!-- ======== RECIPE DETAIL ======== -->
 <main id="view-recipe" class="view" hidden>
   <div class="detail-top"><div class="wrap">
-    <button class="back" id="back">‹ All meals</button>
+    <button class="back" id="back">‹ Back to list</button>
     <button class="wake" id="wake" aria-pressed="false" hidden>Keep screen on</button>
   </div></div>
   <div class="wrap" id="recipe"></div>
@@ -313,6 +318,12 @@ details[open] summary::after { content: "−"; }
       <summary><h2>Adjust meals for this restock</h2></summary>
       <div id="picks"></div>
     </details>
+
+    <section class="panel">
+      <h2>Add snacks</h2>
+      <p class="makes">Each + adds one batch to the shopping list.</p>
+      <div id="snackpicks"></div>
+    </section>
 
     <section class="panel">
       <h2 id="list-title">Shopping list</h2>
@@ -502,13 +513,14 @@ details[open] summary::after { content: "−"; }
   }
 
   /* ---- meals view ---- */
+  const MEALS = RECIPES.filter(r => r.cat !== "snacks");
   function renderPassport() {
-    $("#passport").innerHTML = RECIPES.map(r => `<button class="pp ${cooked.has(r.id) ? "done" : ""}" data-open="${r.id}" aria-label="${esc(r.name)}${cooked.has(r.id) ? ", cooked" : ""}">${r.emoji}</button>`).join("");
-    const n = cooked.size;
-    $("#passport-label").innerHTML = n === RECIPES.length ? "<b>All 14 cooked.</b>" : n ? `<b>${n} of ${RECIPES.length}</b> cooked so far. Stamp each one as you go.` : "Stamp each meal as you cook it.";
+    $("#passport").innerHTML = MEALS.map(r => `<button class="pp ${cooked.has(r.id) ? "done" : ""}" data-open="${r.id}" aria-label="${esc(r.name)}${cooked.has(r.id) ? ", cooked" : ""}">${r.emoji}</button>`).join("");
+    const n = MEALS.filter(r => cooked.has(r.id)).length;
+    $("#passport-label").innerHTML = n === MEALS.length ? `<b>All ${MEALS.length} cooked.</b>` : n ? `<b>${n} of ${MEALS.length}</b> cooked so far. Stamp each one as you go.` : "Stamp each meal as you cook it.";
   }
   function renderChips() {
-    const opts = [["all", "All meals"], ...Object.entries(CATS).map(([k, c]) => [k, c.label])];
+    const opts = [["all", "All"], ...Object.entries(CATS).map(([k, c]) => [k, c.label])];
     $("#chips").innerHTML = opts.map(([k, l]) => `<button class="chip" data-filter="${k}" aria-pressed="${filter === k}">${l}</button>`).join("");
   }
   function renderGroups() {
@@ -516,7 +528,7 @@ details[open] summary::after { content: "−"; }
       <div class="group-title"><h2>${c.label}</h2><span>${c.note}</span></div>
       <ul class="rlist">${RECIPES.filter(r => r.cat === k).map(r => `
         <li><button class="rrow" data-open="${r.id}">${badge(r)}
-          <span><h3>${esc(r.name)}</h3><span class="meta">${r.mins} min. ${esc(r.keeps)}.</span></span>
+          <span><h3>${esc(r.name)}</h3><span class="meta">${r.mins} min. ${r.protein ? `${r.protein} protein per serve` : esc(r.keeps)}.</span></span>
         </button></li>`).join("")}
       </ul>`).join("");
   }
@@ -525,32 +537,34 @@ details[open] summary::after { content: "−"; }
   function renderRecipe(r) {
     const items = shoppingFor({ [r.id]: 1 });
     const n = plan[r.id] || 0;
+    const isSnack = r.cat === "snacks";
     $("#recipe").innerHTML = `
       <div class="d-hero">${badge(r)}<div><h1>${esc(r.name)}</h1><div class="cat">${CATS[r.cat].label}</div></div></div>
       <p class="blurb">${esc(r.blurb)}</p>
       <div class="facts">
-        <div class="fact"><b>${r.mins} min</b><span>start to bowl</span></div>
-        <div class="fact"><b>${esc(r.serves.split(" ")[0].replace(/,$/, ""))}</b><span>${esc(r.serves.replace(/^\S+\s?/, "").replace(/[()]/g, "") || "serves")}</span></div>
-        <div class="fact"><b>${esc(r.keeps.match(/\d[–\d]*\s*days?/)?.[0] || (r.keeps.includes("next day") ? "1 day" : "Fresh"))}</b><span>${r.keeps.includes("salmon") ? "to cook the salmon" : r.keeps === "Make fresh" ? "best eaten now" : "in the fridge"}</span></div>
+        <div class="fact"><b>${r.mins} min</b><span>${isSnack ? "start to finish" : "start to bowl"}</span></div>
+        ${r.protein ? `<div class="fact"><b>${esc(r.protein)}</b><span>protein per serve</span></div>` : `<div class="fact"><b>${esc(r.serves.split(" ")[0].replace(/,$/, ""))}</b><span>${esc(r.serves.replace(/^\S+\s?/, "").replace(/[()]/g, "") || "serves")}</span></div>`}
+        ${r.keepShort ? `<div class="fact"><b>${esc(r.keepShort)}</b><span>${esc(r.keepLabel)}</span></div>` : `<div class="fact"><b>${esc(r.keeps.match(/\d[–\d]*\s*days?/)?.[0] || (r.keeps.includes("next day") ? "1 day" : "Fresh"))}</b><span>${r.keeps.includes("salmon") ? "to cook the salmon" : r.keeps === "Make fresh" ? "best eaten now" : "in the fridge"}</span></div>`}
       </div>
-      <div class="actions">
-        <button class="btn ${cooked.has(r.id) ? "stamped" : "primary"}" id="stamp">${cooked.has(r.id) ? "Cooked ✓" : "Stamp as cooked"}</button>
-        <button class="btn" id="addplan">${n ? `On the list ×${n}` : "Add to shop list"}</button>
+      <div class="actions ${isSnack ? "single" : ""}">
+        ${isSnack ? "" : `<button class="btn ${cooked.has(r.id) ? "stamped" : "primary"}" id="stamp">${cooked.has(r.id) ? "Cooked ✓" : "Stamp as cooked"}</button>`}
+        <button class="btn ${isSnack && !n ? "primary" : ""}" id="addplan">${n ? `On the list ×${n}` : "Add to shop list"}</button>
       </div>
       <section class="panel"><h2>Ingredients</h2>
+        ${isSnack ? `<p class="makes">Makes ${esc(r.serves)}.</p>` : ""}
         <ul class="ings">${r.ing.map(i => `<li><button class="ing" aria-pressed="false"><span class="tick">✓</span><span class="txt">${esc(i.t)}${i.kit ? '<span class="kit-tag">kit</span>' : ""}</span></button></li>`).join("")}</ul>
       </section>
       <section class="panel"><h2>Method</h2>
         <ol class="steps">${r.steps.map(s => `<li><span>${esc(s)}</span></li>`).join("")}</ol>
-        <div class="note"><h3>Leftovers</h3><p>${esc(r.leftovers)}</p></div>
+        <div class="note"><h3>${isSnack ? "Storing" : "Leftovers"}</h3><p>${esc(r.leftovers)}</p></div>
         <div class="note tip"><h3>Camp tip</h3><p>${esc(r.tip)}</p></div>
       </section>
       <section class="panel shopguide"><h2>Shopping guide</h2>
         <p style="margin:0;color:var(--ink-soft);font-size:15px">For one batch. Items marked kit come from the pantry kit.</p>
         ${AISLES.map(([a, label]) => { const rows = items.filter(x => x.aisle === a); return rows.length ? `<div class="aisle">${label}</div>` + rows.map(x => `<div class="sg-row"><span>${esc(x.name)}${KEEPS[x.name] ? `<small>${esc(KEEPS[x.name])}</small>` : ""}</span><span class="amt">${fmtAmt(x.q, x.u, x.name)}</span></div>`).join("") : ""; }).join("")}
       </section>`;
-    $("#stamp").onclick = e => {
-      if (cooked.has(r.id)) cooked.delete(r.id); else { cooked.add(r.id); toast(`${r.emoji} Stamped. ${cooked.size} of ${RECIPES.length}.`); }
+    if (!isSnack) $("#stamp").onclick = e => {
+      if (cooked.has(r.id)) cooked.delete(r.id); else { cooked.add(r.id); toast(`${r.emoji} Stamped. ${MEALS.filter(m => cooked.has(m.id)).length} of ${MEALS.length}.`); }
       save(); renderRecipe(r); const b = $(".d-hero .badge"); if (cooked.has(r.id)) b.classList.add("stamp-anim");
     };
     $("#addplan").onclick = () => { plan[r.id] = (plan[r.id] || 0) + 1; save(); toast(`Added. ×${plan[r.id]} on this restock.`); renderRecipe(r); };
@@ -562,15 +576,19 @@ details[open] summary::after { content: "−"; }
     if (initial) $("#pickpanel").open = !Object.keys(plan).length;
     const order = plan.__cycle ? CYCLES[plan.__cycle].plan : null;
     $("#cycle").innerHTML = order ? order.map((id, i) => `<li>${badge(byId[id])}Night ${i + 1}</li>`).join("") : "";
-    $("#picks").innerHTML = RECIPES.map(r => `
-      <div class="pick">${badge(r)}<span class="nm">${esc(r.name)}</span>
+    const pickRow = r => `
+      <div class="pick">${badge(r)}<span class="nm">${esc(r.name)}${r.protein ? `<small>${esc(r.batch)}, ${esc(r.protein)} protein each</small>` : ""}</span>
         <span class="stepper"><button data-dec="${r.id}" aria-label="One fewer ${esc(r.name)}">−</button><output>${plan[r.id] || 0}</output><button data-inc="${r.id}" aria-label="One more ${esc(r.name)}">+</button></span>
-      </div>`).join("");
+      </div>`;
+    $("#picks").innerHTML = MEALS.map(pickRow).join("");
+    $("#snackpicks").innerHTML = RECIPES.filter(r => r.cat === "snacks").map(pickRow).join("");
     const counts = Object.fromEntries(Object.entries(plan).filter(([k]) => !k.startsWith("__")));
     const items = shoppingFor(counts);
-    const dinners = Object.entries(counts).filter(([id]) => byId[id] && byId[id].cat !== "easy").reduce((a, [, n]) => a + n, 0);
-    $("#list-title").textContent = items.length ? `Shopping list for ${dinners} dinner${dinners === 1 ? "" : "s"}` : "Shopping list";
-    if (!items.length) { $("#shoplist").innerHTML = `<p class="empty">Nothing planned yet. Tap Cycle A or Cycle B above, or add meals with the + buttons.</p>`; return; }
+    const tally = cats => Object.entries(counts).filter(([id]) => byId[id] && cats.includes(byId[id].cat)).reduce((a, [, n]) => a + n, 0);
+    const dinners = tally(["pantry", "fresh"]), snacks = tally(["snacks"]);
+    const parts = [dinners && `${dinners} dinner${dinners === 1 ? "" : "s"}`, snacks && `${snacks} snack batch${snacks === 1 ? "" : "es"}`].filter(Boolean);
+    $("#list-title").textContent = items.length && parts.length ? `Shopping list for ${parts.join(" and ")}` : "Shopping list";
+    if (!items.length) { $("#shoplist").innerHTML = `<p class="empty">Nothing planned yet. Tap Cycle A or Cycle B above, or add meals and snacks with the + buttons.</p>`; return; }
     const left = items.filter(x => !ticked.has(x.key)).length;
     $("#shoplist").innerHTML = `<p class="empty" style="padding-bottom:0">${left} of ${items.length} items still to get. Tick off anything already in the drawers.</p>` +
       AISLES.map(([a, label]) => { const rows = items.filter(x => x.aisle === a).sort((x, y) => x.name.localeCompare(y.name)); return rows.length ? `<h2 style="font-size:18px;margin-top:18px">${label}</h2>` + rows.map(x => `
@@ -613,9 +631,9 @@ details[open] summary::after { content: "−"; }
     if (t.dataset.open) location.hash = "r/" + t.dataset.open;
     else if (t.dataset.view) location.hash = t.dataset.view === "meals" ? "" : t.dataset.view;
     else if (t.dataset.filter) { filter = t.dataset.filter; renderChips(); renderGroups(); }
-    else if (t.dataset.cycle) { const c = CYCLES[t.dataset.cycle]; plan = { __cycle: t.dataset.cycle }; c.plan.forEach(id => plan[id] = (plan[id] || 0) + 1); Object.assign(plan, c.extras); ticked.clear(); save(); renderPlan(); toast(`${c.name} loaded.`); }
-    else if (t.dataset.inc) { plan[t.dataset.inc] = (plan[t.dataset.inc] || 0) + 1; delete plan.__cycle; save(); renderPlan(); }
-    else if (t.dataset.dec) { plan[t.dataset.dec] = Math.max(0, (plan[t.dataset.dec] || 0) - 1); if (!plan[t.dataset.dec]) delete plan[t.dataset.dec]; delete plan.__cycle; save(); renderPlan(); }
+    else if (t.dataset.cycle) { const c = CYCLES[t.dataset.cycle]; const keep = Object.fromEntries(Object.entries(plan).filter(([id]) => byId[id] && byId[id].cat === "snacks")); plan = { __cycle: t.dataset.cycle, ...keep }; c.plan.forEach(id => plan[id] = (plan[id] || 0) + 1); Object.assign(plan, c.extras); ticked.clear(); save(); renderPlan(); toast(`${c.name} loaded.`); }
+    else if (t.dataset.inc) { plan[t.dataset.inc] = (plan[t.dataset.inc] || 0) + 1; if (byId[t.dataset.inc].cat !== "snacks") delete plan.__cycle; save(); renderPlan(); }
+    else if (t.dataset.dec) { plan[t.dataset.dec] = Math.max(0, (plan[t.dataset.dec] || 0) - 1); if (!plan[t.dataset.dec]) delete plan[t.dataset.dec]; if (byId[t.dataset.dec].cat !== "snacks") delete plan.__cycle; save(); renderPlan(); }
     else if (t.dataset.tick) { ticked.has(t.dataset.tick) ? ticked.delete(t.dataset.tick) : ticked.add(t.dataset.tick); save(); renderPlan(); }
     else if (t.dataset.kit) { const k = new Set(store.get("kit", [])); k.has(t.dataset.kit) ? k.delete(t.dataset.kit) : k.add(t.dataset.kit); store.set("kit", [...k]); t.setAttribute("aria-checked", k.has(t.dataset.kit)); }
   });

@@ -6,7 +6,8 @@
 const CATS = {
   pantry: { label: "Pantry one-pots", short: "Pantry", note: "Any night of the cycle" },
   fresh:  { label: "Fresh-first nights", short: "Fresh-first", note: "Cook in the first 2–3 nights after a shop" },
-  easy:   { label: "Easy extras", short: "Easy", note: "Breakfasts, lunches and leftover rescues" }
+  easy:   { label: "Easy extras", short: "Easy", note: "Breakfasts, lunches and leftover rescues" },
+  snacks: { label: "Snacks", short: "Snacks", note: "High protein, little cooking" }
 };
 
 const RECIPES = [
@@ -374,6 +375,146 @@ const RECIPES = [
     ],
     leftovers: "None, it's best fresh. For a no-pot version, pour Jetboil water over oats in an insulated mug and cover for 5 minutes.",
     tip: "UHT milk keeps for months unopened, so it saves fridge space until you need it."
+  },
+  {
+    id: "eggs", batch: "4 serves of 2 eggs", short: "Boiled eggs", name: "Boiled eggs for the week", emoji: "🥚", cat: "snacks",
+    mins: 15, serves: "4 serves (2 eggs each)", protein: "≈12 g", keeps: "Keeps 1 week in the fridge",
+    keepShort: "1 week", keepLabel: "in the fridge",
+    blurb: "Boil eight at once and you have a grab-and-go snack for most of the week.",
+    ing: [
+      { t: "8 eggs", s: ["Eggs", 8, "", "fridge"] },
+      { t: "Salt, pepper and chilli flakes, to serve", kit: true }
+    ],
+    steps: [
+      "Bring a pot of water to the boil. Boiling it in the Jetboil first and tipping it in saves gas.",
+      "Lower the eggs in with a spoon and boil for 10 minutes for firm yolks.",
+      "Drain and cover with cold water for 5 minutes so they stop cooking and peel more easily.",
+      "Dry them and store them in a lidded container in the fridge. Peel and season as you eat them."
+    ],
+    leftovers: "Peeled or not, they keep for about a week in the fridge. Unpeeled ones are easier to carry in a daypack.",
+    tip: "Older eggs peel more cleanly than very fresh ones, so boil the oldest in the case."
+  },
+  {
+    id: "yoghurt", batch: "4 bowls", short: "Yoghurt bowls", name: "Greek yoghurt, strawberries & toasted almonds", emoji: "🍓", cat: "snacks",
+    mins: 5, serves: "4 serves", protein: "≈18 g", keeps: "Yoghurt keeps about a week once open",
+    keepShort: "1 week", keepLabel: "for the tub, once open",
+    blurb: "Tasmanian strawberries are in season from November. Pick a yoghurt with at least 8 g of protein per 100 g on the label, since some Greek-style tubs have much less.",
+    ing: [
+      { t: "680 g plain Greek yoghurt", s: ["Greek yoghurt, plain", 680, "g", "fridge"] },
+      { t: "1 punnet (250 g) strawberries", s: ["Strawberries", 250, "g", "veg"] },
+      { t: "60 g almonds, roughly chopped", s: ["Almonds", 60, "g", "pantry"] },
+      { t: "1½ tbsp Tasmanian honey", s: ["Tasmanian honey (buy local)", 1.5, "tbsp", "pantry"] },
+      { t: "Pinch of cinnamon", kit: true }
+    ],
+    steps: [
+      "Toast the almonds in a dry pan over medium heat for 3–4 minutes, shaking often, until they smell nutty. Let them cool.",
+      "Hull and slice the strawberries.",
+      "Spoon about 170 g of yoghurt into each bowl, top with strawberries and almonds, and finish with honey and cinnamon."
+    ],
+    leftovers: "Keep the toasted almonds in a jar and slice strawberries fresh each time. Cut strawberries go soft within a day.",
+    tip: "Strawberries bruise in a moving car, so carry the punnet on top of everything else in the fridge."
+  },
+  {
+    id: "smokedsalmon", batch: "4 serves", short: "Smoked salmon", name: "Hot-smoked salmon on rye crispbread", emoji: "🥒", cat: "snacks",
+    mins: 10, serves: "4 serves (2 crispbreads each)", protein: "≈15 g", keeps: "Eat within 2 days of opening",
+    keepShort: "2 days", keepLabel: "once the pack is open",
+    blurb: "Tasmanian hot-smoked salmon is cooked and ready to eat, so this needs only a knife and a spoon.",
+    ing: [
+      { t: "200 g Tasmanian hot-smoked salmon", s: ["Tasmanian hot-smoked salmon", 200, "g", "fridge"] },
+      { t: "8 rye crispbreads", s: ["Rye crispbread", 8, "", "pantry"] },
+      { t: "120 g Greek yoghurt", s: ["Greek yoghurt, plain", 120, "g", "fridge"] },
+      { t: "1 Lebanese cucumber", s: ["Lebanese cucumber", 1, "", "fridge"] },
+      { t: "½ lemon", s: ["Lemon", 0.5, "", "veg"] },
+      { t: "1 tsp dried dill, salt and pepper", kit: true }
+    ],
+    steps: [
+      "Mix the yoghurt with the dill, a squeeze of lemon and a pinch of salt.",
+      "Slice the cucumber into thin rounds.",
+      "Spread each crispbread with the yoghurt, layer on the cucumber and flake the salmon over the top. Finish with pepper and more lemon."
+    ],
+    leftovers: "Build them as you eat them, because crispbread goes soft under the topping. Keep opened salmon wrapped in the fridge and eat it within 2 days.",
+    tip: "A sealed pack keeps until its use-by date, so buy it on shop day and open it when you need it."
+  },
+  {
+    id: "tunasmash", batch: "4 serves", short: "Tuna smash", name: "Tuna & white bean smash", emoji: "🫘", cat: "snacks",
+    mins: 10, serves: "4 serves", protein: "≈12 g", keeps: "Keeps 2 days in the fridge",
+    keepShort: "2 days", keepLabel: "in the fridge",
+    blurb: "Everything comes from a tin or a drawer, and a fork is the only tool. Spread it on crispbread or scoop it up with capsicum strips.",
+    ing: [
+      { t: "1 × 400 g tin cannellini beans, drained", s: ["Cannellini beans, 400 g tin", 1, "tins", "pantry"] },
+      { t: "1 × 185 g tin tuna in olive oil", s: ["Tuna in olive oil, 185 g tin", 1, "tins", "pantry"] },
+      { t: "1 lemon, zest and juice", s: ["Lemon", 1, "", "veg"] },
+      { t: "1 tbsp capers, chopped", s: ["Capers, jar", 1, "tbsp", "pantry"] },
+      { t: "1 red capsicum, in strips", s: ["Red capsicum", 1, "", "veg"] },
+      { t: "8 rye crispbreads (optional)", s: ["Rye crispbread", 8, "", "pantry"] },
+      { t: "Pepper", kit: true }
+    ],
+    steps: [
+      "Mash the beans in a bowl with a fork until mostly smooth.",
+      "Flake in the tuna with its oil, then add the lemon zest and juice, capers and plenty of pepper. Mix well.",
+      "Serve with capsicum strips or on crispbread."
+    ],
+    leftovers: "Keep it covered in the fridge and eat it within 2 days.",
+    tip: "Buy tuna in olive oil rather than brine. The oil makes the smash creamy without mayonnaise."
+  },
+  {
+    id: "oatbites", batch: "6 serves of 2 bites", short: "Oat bites", name: "Peanut butter oat bites", emoji: "🥜", cat: "snacks",
+    mins: 15, serves: "12 bites (6 serves of 2)", protein: "≈9 g", keeps: "Keeps 1 week in the fridge",
+    keepShort: "1 week", keepLabel: "in the fridge",
+    blurb: "These take one bowl and no cooking. Roll them at night and they're firm by morning.",
+    ing: [
+      { t: "1 cup (90 g) rolled oats", s: ["Rolled oats", 90, "g", "pantry"] },
+      { t: "½ cup (125 g) natural peanut butter", s: ["Natural peanut butter (100% peanuts)", 125, "g", "pantry"] },
+      { t: "3 tbsp Tasmanian honey", s: ["Tasmanian honey (buy local)", 3, "tbsp", "pantry"] },
+      { t: "2 tbsp (24 g) chia seeds", s: ["Chia seeds", 24, "g", "pantry"] },
+      { t: "30 g pepitas", s: ["Pepitas", 30, "g", "pantry"] },
+      { t: "½ tsp cinnamon and a pinch of salt", kit: true }
+    ],
+    steps: [
+      "Stir everything together in a bowl until it clumps. If it's crumbly, add water a teaspoon at a time.",
+      "Roll into 12 balls about the size of a walnut. Damp hands stop the mix sticking.",
+      "Chill in a lidded container for at least an hour to firm up."
+    ],
+    leftovers: "They keep for a week in the fridge. Out of the fridge they soften, but they're fine in a daypack for the day.",
+    tip: "Natural peanut butter separates in the jar, so stir the oil back in before you measure it."
+  },
+  {
+    id: "chickpeas", batch: "4 serves", short: "Crispy chickpeas", name: "Crispy parmesan chickpeas", emoji: "🧆", cat: "snacks",
+    mins: 20, serves: "4 serves", protein: "≈10 g", keeps: "Best the day you make them",
+    keepShort: "1 day", keepLabel: "before they soften",
+    blurb: "Fry them until they rattle in the pan, then toss them with parmesan and smoked paprika. They're best eaten warm.",
+    ing: [
+      { t: "2 × 400 g tins chickpeas, drained", s: ["Chickpeas, 400 g tin", 2, "tins", "pantry"] },
+      { t: "2 tbsp olive oil", kit: true },
+      { t: "1 tsp smoked paprika, ½ tsp cumin, salt", kit: true },
+      { t: "20 g parmesan, finely grated", s: ["Parmesan, block", 20, "g", "fridge"] }
+    ],
+    steps: [
+      "Drain the chickpeas and pat them very dry with paper towel, since wet chickpeas steam instead of crisping.",
+      "Heat the oil in your widest pan over medium-high heat. Add the chickpeas in one layer and fry for 12–15 minutes, shaking the pan every minute, until golden and crunchy.",
+      "Take the pan off the heat and toss with the paprika, cumin, salt and parmesan."
+    ],
+    leftovers: "They go soft within a day. Keep leftovers sealed and re-crisp them in a dry pan for 2 minutes.",
+    tip: "Hold a lid loosely over the pan, because the odd chickpea pops."
+  },
+  {
+    id: "snackbox", batch: "4 boxes", short: "Snack box", name: "Cheddar, apple & almond box", emoji: "🧀", cat: "snacks",
+    mins: 5, serves: "4 boxes", protein: "≈15 g", keeps: "Pack it the day you eat it",
+    keepShort: "Same day", keepLabel: "pack it fresh",
+    blurb: "A no-cook box for walking days, made from things that already live in the car.",
+    ing: [
+      { t: "160 g Tasmanian cheddar", s: ["Cheddar, block", 160, "g", "fridge"] },
+      { t: "2 apples", s: ["Apples", 2, "", "veg"] },
+      { t: "80 g almonds", s: ["Almonds", 80, "g", "pantry"] },
+      { t: "2 carrots", s: ["Carrot", 2, "", "veg"] }
+    ],
+    steps: [
+      "Cut the cheddar into fingers and the carrots into sticks.",
+      "Quarter and core the apples just before you pack them, or take them whole.",
+      "Divide everything between four containers, about 40 g of cheese and 20 g of almonds in each."
+    ],
+    leftovers: "Wrap cut cheese tightly and keep it in the fridge. Whole apples keep for weeks.",
+    tip: "A squeeze of lemon over cut apple stops it going brown."
   }
 ];
 
@@ -414,7 +555,13 @@ const KEEPS = {
   "Sourdough loaf": "3–4 days",
   "UHT long-life milk": "Months unopened; fridge once open",
   "Microwave rice pouch, 250 g": "Months; once opened, fridge and use next day",
-  "Red curry paste, jar": "Fridge once opened"
+  "Red curry paste, jar": "Fridge once opened",
+  "Strawberries": "2–3 days in the fridge, so buy near the day",
+  "Almonds": "Months in a sealed bag",
+  "Natural peanut butter (100% peanuts)": "Months; no fridge needed",
+  "Chia seeds": "Months, kept dry",
+  "Tasmanian hot-smoked salmon": "Sealed until its use-by; 2 days once open",
+  "Rye crispbread": "Months sealed; keep it dry"
 };
 
 /* Two rotating 7-dinner cycles. Each dinner makes the next day's lunch. */
@@ -427,7 +574,7 @@ const CYCLES = {
 const KIT = [
   { group: "Spice tin", items: ["Ground cumin", "Smoked paprika", "Dried oregano", "Chilli flakes", "Turmeric", "Garam masala", "Cinnamon", "Dried thyme", "Dried dill", "Dried mint", "Bay leaves", "Salt and pepper grinders"] },
   { group: "Bottles", items: ["Olive oil (1 L)", "Sesame oil", "Soy sauce", "Red wine vinegar", "Chilli sauce"] },
-  { group: "Dry goods", items: ["Stock cubes (2 boxes)", "Red lentils", "Pearl barley", "Wholemeal couscous", "Wholemeal spaghetti", "Risoni", "Rolled oats", "Microwave rice pouches", "Dried porcini", "Walnuts and pepitas"] },
+  { group: "Dry goods", items: ["Stock cubes (2 boxes)", "Red lentils", "Pearl barley", "Wholemeal couscous", "Wholemeal spaghetti", "Risoni", "Rolled oats", "Microwave rice pouches", "Dried porcini", "Walnuts, almonds and pepitas", "Chia seeds", "Natural peanut butter (100% peanuts)"] },
   { group: "Tins and jars for Cycle A", items: ["Black beans ×2", "Chickpeas ×3", "Cannellini ×2", "Diced tomatoes ×2", "Crushed tomatoes ×1", "Coconut milk ×2", "Tuna in olive oil ×1", "Capers, olives, anchovies", "Red curry paste, Dijon, tomato paste", "Roasted capsicum jar", "UHT milk ×2 (1 L)"] },
   { group: "Kit, not food", items: ["Paper towel (wipe pans before washing)", "Zip bags for parmesan rinds and leftovers", "Breathable produce bags", "Hard egg case", "4 lidded leftover containers", "Fridge thermometer"] }
 ];
