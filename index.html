@@ -124,7 +124,7 @@ a { color: var(--lichen-ink); }
 .d-hero h1 { font-size: 30px; font-weight: 760; }
 .d-hero .cat { font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
 .blurb { margin: 16px 0 0; }
-.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+.facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 16px; }
 .fact { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
 .fact b { display: block; font-family: "Bricolage", sans-serif; font-size: 20px; font-weight: 700; line-height: 1.1; }
 .fact span { font-size: 13px; color: var(--ink-soft); }
@@ -279,7 +279,7 @@ details[open] summary::after { content: "−"; }
   <path d="M120 14 c-3 -6 -12 -5 -11 2 c1 5 11 10 11 10 c0 0 10 -5 11 -10 c1 -7 -8 -8 -11 -2 z" fill="#FF8FB1"/>
 </svg>
       <h1>Scott &amp; Sarah’s<br>Camp Kitchen</h1>
-      <p>Fourteen one-pot meals and seven high-protein snacks for six weeks on the road.</p>
+      <p>Fourteen one-pot meals and seven high-protein snacks for six weeks on the road, with calories and protein for every serve.</p>
       <div class="passport">
         <div class="passport-row" id="passport"></div>
         <div class="passport-label" id="passport-label"></div>
@@ -403,6 +403,19 @@ details[open] summary::after { content: "−"; }
     </section>
 
     <section class="tipcard">
+      <h2>⚖️ Eating lighter</h2>
+      <p>Each recipe page shows calories and protein for one serve. Dinners make four serves, so eat one and box the next day's lunch straight away.</p>
+      <ul>
+        <li>Most dinners land at 410–550 kcal with 20–47 g of protein. The snacks are 140–230 kcal.</li>
+        <li>Measure the oil. A tablespoon is about 120 kcal, and a free pour is often three times that.</li>
+        <li>For the most protein per calorie, pick the chilli, lemony chicken, eggs, yoghurt bowls and tuna smash.</li>
+        <li>The oat bites have the fewest grams of protein per calorie, so keep them for long walking days.</li>
+        <li>Light coconut milk and Greek yoghurt vary a lot between brands. The numbers assume Ayam Light and Chobani Natural Light, so check the label if you buy something else.</li>
+      </ul>
+      <p>Calories are estimates from typical label values. They're close enough to plan a deficit, not to count to the last 10 kcal.</p>
+    </section>
+
+    <section class="tipcard">
       <h2>🧽 Less washing up</h2>
       <ul>
         <li>Wipe pans with paper towel before washing.</li>
@@ -419,6 +432,8 @@ details[open] summary::after { content: "−"; }
         <li><a href="https://parks.tas.gov.au/explore-our-parks/know-before-you-go/campfires-and-fire-bans">Tasmania Parks – campfires and fire bans</a></li>
         <li><a href="https://theboatgalley.com/storing-veggies-refrigeration/">The Boat Galley – storing vegetables without refrigeration</a></li>
         <li><a href="https://www.fruitgrowerstas.org.au/news/1390/">Fruit Growers Tasmania – Seasonal Produce Guide</a></li>
+        <li><a href="https://www.chobani.com.au/?p=823">Chobani – Natural Light Greek yogurt nutrition</a></li>
+        <li><a href="https://www.ayam.com/products/coconut/regular-coconut/product/light-coconut-milk-270ml">Ayam – Light coconut milk 270 ml nutrition</a></li>
       </ul>
     </section>
   </div>
@@ -470,7 +485,7 @@ details[open] summary::after { content: "−"; }
   }
   function fmtAmt(q, u, name) {
     if (u === "g") return q >= 1000 ? (q / 1000).toFixed(q % 1000 ? 2 : 0).replace(/\.?0+$/, "") + " kg" : Math.round(q) + " g";
-    if (u === "L") return fmtNum(q) + " L";
+    if (u === "L") return (Math.round(q * 10) / 10) + " L";
     if (u === "cloves") return q + " cloves" + (q > 6 ? ` (≈${Math.ceil(q / 10)} bulb${q > 10 ? "s" : ""})` : "");
     if (u === "tins") return q + (q === 1 ? " tin" : " tins");
     if (u === "") { const s = fmtNum(q); return q % 1 ? `${s} (buy ${Math.ceil(q)})` : s; }
@@ -528,7 +543,7 @@ details[open] summary::after { content: "−"; }
       <div class="group-title"><h2>${c.label}</h2><span>${c.note}</span></div>
       <ul class="rlist">${RECIPES.filter(r => r.cat === k).map(r => `
         <li><button class="rrow" data-open="${r.id}">${badge(r)}
-          <span><h3>${esc(r.name)}</h3><span class="meta">${r.mins} min. ${r.protein ? `${r.protein} protein per serve` : esc(r.keeps)}.</span></span>
+          <span><h3>${esc(r.name)}</h3><span class="meta">${r.mins} min. ${nutrition(r).kcal} kcal and ${nutrition(r).protein} g protein per serve.</span></span>
         </button></li>`).join("")}
       </ul>`).join("");
   }
@@ -538,20 +553,22 @@ details[open] summary::after { content: "−"; }
     const items = shoppingFor({ [r.id]: 1 });
     const n = plan[r.id] || 0;
     const isSnack = r.cat === "snacks";
+    const nu = nutrition(r);
     $("#recipe").innerHTML = `
       <div class="d-hero">${badge(r)}<div><h1>${esc(r.name)}</h1><div class="cat">${CATS[r.cat].label}</div></div></div>
       <p class="blurb">${esc(r.blurb)}</p>
       <div class="facts">
         <div class="fact"><b>${r.mins} min</b><span>${isSnack ? "start to finish" : "start to bowl"}</span></div>
-        ${r.protein ? `<div class="fact"><b>${esc(r.protein)}</b><span>protein per serve</span></div>` : `<div class="fact"><b>${esc(r.serves.split(" ")[0].replace(/,$/, ""))}</b><span>${esc(r.serves.replace(/^\S+\s?/, "").replace(/[()]/g, "") || "serves")}</span></div>`}
-        ${r.keepShort ? `<div class="fact"><b>${esc(r.keepShort)}</b><span>${esc(r.keepLabel)}</span></div>` : `<div class="fact"><b>${esc(r.keeps.match(/\d[–\d]*\s*days?/)?.[0] || (r.keeps.includes("next day") ? "1 day" : "Fresh"))}</b><span>${r.keeps.includes("salmon") ? "to cook the salmon" : r.keeps === "Make fresh" ? "best eaten now" : "in the fridge"}</span></div>`}
+        <div class="fact"><b>${nu.kcal} kcal</b><span>per serve</span></div>
+        <div class="fact"><b>${nu.protein} g</b><span>protein per serve</span></div>
+        <div class="fact"><b>${esc(r.keepShort)}</b><span>${esc(r.keepLabel)}</span></div>
       </div>
       <div class="actions ${isSnack ? "single" : ""}">
         ${isSnack ? "" : `<button class="btn ${cooked.has(r.id) ? "stamped" : "primary"}" id="stamp">${cooked.has(r.id) ? "Cooked ✓" : "Stamp as cooked"}</button>`}
         <button class="btn ${isSnack && !n ? "primary" : ""}" id="addplan">${n ? `On the list ×${n}` : "Add to shop list"}</button>
       </div>
       <section class="panel"><h2>Ingredients</h2>
-        ${isSnack ? `<p class="makes">Makes ${esc(r.serves)}.</p>` : ""}
+        <p class="makes">Makes ${esc(r.serves)}. One serve is ${r.portions === 2 ? "half" : r.portions === 4 ? "a quarter" : `one ${r.portions === 6 ? "sixth" : "part"}`} of the batch.</p>
         <ul class="ings">${r.ing.map(i => `<li><button class="ing" aria-pressed="false"><span class="tick">✓</span><span class="txt">${esc(i.t)}${i.kit ? '<span class="kit-tag">kit</span>' : ""}</span></button></li>`).join("")}</ul>
       </section>
       <section class="panel"><h2>Method</h2>
@@ -577,7 +594,7 @@ details[open] summary::after { content: "−"; }
     const order = plan.__cycle ? CYCLES[plan.__cycle].plan : null;
     $("#cycle").innerHTML = order ? order.map((id, i) => `<li>${badge(byId[id])}Night ${i + 1}</li>`).join("") : "";
     const pickRow = r => `
-      <div class="pick">${badge(r)}<span class="nm">${esc(r.name)}${r.protein ? `<small>${esc(r.batch)}, ${esc(r.protein)} protein each</small>` : ""}</span>
+      <div class="pick">${badge(r)}<span class="nm">${esc(r.name)}<small>${r.batch ? esc(r.batch) + ". " : ""}${nutrition(r).kcal} kcal, ${nutrition(r).protein} g protein per serve</small></span>
         <span class="stepper"><button data-dec="${r.id}" aria-label="One fewer ${esc(r.name)}">−</button><output>${plan[r.id] || 0}</output><button data-inc="${r.id}" aria-label="One more ${esc(r.name)}">+</button></span>
       </div>`;
     $("#picks").innerHTML = MEALS.map(pickRow).join("");
@@ -585,7 +602,7 @@ details[open] summary::after { content: "−"; }
     const counts = Object.fromEntries(Object.entries(plan).filter(([k]) => !k.startsWith("__")));
     const items = shoppingFor(counts);
     const tally = cats => Object.entries(counts).filter(([id]) => byId[id] && cats.includes(byId[id].cat)).reduce((a, [, n]) => a + n, 0);
-    const dinners = tally(["pantry", "fresh"]), snacks = tally(["snacks"]);
+    const dinners = tally(["pantry", "fresh"]) + (counts.friedrice || 0), snacks = tally(["snacks"]);
     const parts = [dinners && `${dinners} dinner${dinners === 1 ? "" : "s"}`, snacks && `${snacks} snack batch${snacks === 1 ? "" : "es"}`].filter(Boolean);
     $("#list-title").textContent = items.length && parts.length ? `Shopping list for ${parts.join(" and ")}` : "Shopping list";
     if (!items.length) { $("#shoplist").innerHTML = `<p class="empty">Nothing planned yet. Tap Cycle A or Cycle B above, or add meals and snacks with the + buttons.</p>`; return; }
